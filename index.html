@@ -3,393 +3,289 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>40-Item HTML Calculator with Commodity Dropdown, Categories, Presets, and Landed Cost Formulas</title>
+<title>Export Landed Cost Calculator - 40 Categorized Items</title>
 <style>
   body { font-family: Arial, sans-serif; margin: 20px; background: #f4f4f9; color: #333; }
-  .container { max-width: 900px; margin: 0 auto; backg<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Export Landed Cost Calculator - Dynamic Scale</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background: #f4f4f9; color: #333; }
-        .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #2c3e50; }
-        .section { margin-bottom: 20px; padding: 15px; border: 1px solid #e0e0e0; border-radius: 6px; }
-        .section-title { font-weight: bold; font-size: 1.2em; margin-bottom: 10px; color: #2980b9; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
-        .item { display: flex; flex-direction: column; }
-        label { font-size: 0.85em; margin-bottom: 3px; font-weight: 600; }
-        input, select { padding: 6px; border: 1px solid #ccc; border-radius: 4px; }
-        .summary { background: #eef7fa; padding: 15px; border-radius: 6px; font-size: 1.1em; }
-        .summary div { margin-bottom: 8px; }
-        .total-cost { font-size: 1.3em; font-weight: bold; color: #27ae60; }
-    </style>
-</head>
-<body>
-<div class="container">
-    <h1>Export Landed Cost Calculator</h1>
-    
-    <div class="section">
-        <div class="section-title">Commodity & Presets</div>
-        <div class="grid">
-            <div class="item">
-                <label for="commodity">Commodity Dropdown</label>
-                <select id="commodity" onchange="applyPreset()">
-                    <option value="rice">Basmati Rice</option>
-                    <option value="paracetamol" selected>Paracetamol API</option>
-                </select>
-            </div>
-            <div class="item">
-                <label for="category">Category</label>
-                <input type="text" id="category" readonly value="Chemicals & Pharma">
-            </div>
-            <div class="item">
-                <label for="basePrice">Base Price per Unit ($)</label>
-                <input type="number" id="basePrice" value="7" oninput="calculate()">
-            </div>
-            <div class="item">
-                <label for="quantity">Quantity (Units)</label>
-                <input type="number" id="quantity" value="1000" oninput="calculate()">
-            </div>
-        </div>
-    </div>
-
-    <div class="section">
-        <div class="section-title">Shipping & Logistics (Per Unit Scale)</div>
-        <div class="grid">
-            <div class="item">
-                <label for="unitFreight">Freight Cost per Unit ($)</label>
-                <input type="number" id="unitFreight" value="1.50" step="0.1" oninput="calculate()">
-            </div>
-            <div class="item">
-                <label for="inlandFreight">Base Inland Transport ($)</label>
-                <input type="number" id="inlandFreight" value="300" oninput="calculate()">
-            </div>
-            <div class="item">
-                <label for="insuranceRate">Insurance Rate (%)</label>
-                <input type="number" id="insuranceRate" value="0.5" step="0.1" oninput="calculate()">
-            </div>
-            <div class="item">
-                <label for="portHandling">Port Handling per Unit ($)</label>
-                <input type="number" id="portHandling" value="0.25" step="0.05" oninput="calculate()">
-            </div>
-        </div>
-    </div>
-
-    <div class="section">
-        <div class="section-title">Customs, Duties & Taxes</div>
-        <div class="grid">
-            <div class="item">
-                <label for="customsDuty">Customs Duty (%)</label>
-                <input type="number" id="customsDuty" value="6.5" step="0.1" oninput="calculate()">
-            </div>
-            <div class="item">
-                <label for="vatRate">VAT / Import Tax (%)</label>
-                <input type="number" id="vatRate" value="10" step="0.1" oninput="calculate()">
-            </div>
-            <div class="item">
-                <label for="brokerageFee">Customs Brokerage ($)</label>
-                <input type="number" id="brokerageFee" value="150" oninput="calculate()">
-            </div>
-        </div>
-    </div>
-
-    <div class="summary">
-        <div><strong>Total Base Product Value (FOB):</strong> $<span id="totalFob">0.00</span></div>
-        <div><strong>Freight & Insurance (CIF Adjustment):</strong> $<span id="totalFreightIns">0.00</span></div>
-        <div><strong>Total Customs Duty & Taxes:</strong> $<span id="totalDuties">0.00</span></div>
-        <div><strong>Total Handling & Fees:</strong> $<span id="totalFees">0.00</span></div>
-        <hr>
-        <div class="total-cost">Total Landed Cost: $<span id="totalLanded">0.00</span></div>
-        <div><strong>Landed Cost Per Unit:</strong> $<span id="unitLanded">0.00</span></div>
-    </div>
-</div>
-
-<script>
-function calculate() {
-    const basePrice = parseFloat(document.getElementById('basePrice').value) || 0;
-    const quantity = parseFloat(document.getElementById('quantity').value) || 0;
-    const unitFreight = parseFloat(document.getElementById('unitFreight').value) || 0;
-    const inlandFreight = parseFloat(document.getElementById('inlandFreight').value) || 0;
-    const insuranceRate = parseFloat(document.getElementById('insuranceRate').value) || 0;
-    const portHandlingRate = parseFloat(document.getElementById('portHandling').value) || 0;
-    const customsDuty = parseFloat(document.getElementById('customsDuty').value) || 0;
-    const vatRate = parseFloat(document.getElementById('vatRate').value) || 0;
-    const brokerageFee = parseFloat(document.getElementById('brokerageFee').value) || 0;
-
-    // Dynamic scaling calculations
-    const totalFob = basePrice * quantity;
-    const totalFreight = (unitFreight * quantity) + inlandFreight; 
-    const insuranceAmount = (totalFob + totalFreight) * (insuranceRate / 100);
-    const cifValue = totalFob + totalFreight + insuranceAmount;
-    
-    const dutyAmount = cifValue * (customsDuty / 100);
-    const vatAmount = (cifValue + dutyAmount) * (vatRate / 100);
-    const totalDuties = dutyAmount + vatAmount;
-    
-    const totalFees = (portHandlingRate * quantity) + brokerageFee;
-    const totalLandedCost = cifValue + totalDuties + totalFees;
-    const unitLandedCost = quantity > 0 ? (totalLandedCost / quantity) : 0;
-
-    document.getElementById('totalFob').innerText = totalFob.toFixed(2);
-    document.getElementById('totalFreightIns').innerText = (totalFreight + insuranceAmount).toFixed(2);
-    document.getElementById('totalDuties').innerText = totalDuties.toFixed(2);
-    document.getElementById('totalFees').innerText = totalFees.toFixed(2);
-    document.getElementById('totalLanded').innerText = totalLandedCost.toFixed(2);
-    document.getElementById('unitLanded').innerText = unitLandedCost.toFixed(2);
-}
-
-calculate();
-</script>
-</body>
-</html>round: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-  h1 { text-align: center; color: #2c3e50; }
-  .section { margin-bottom: 20px; padding: 15px; border: 1px solid #e0e0e0; border-radius: 6px; }
-  .section-title { font-weight: bold; font-size: 1.2em; margin-bottom: 10px; color: #2980b9; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
-  .item { display: flex; flex-direction: column; }
-  label { font-size: 0.85em; margin-bottom: 3px; font-weight: 600; }
-  input, select { padding: 6px; border: 1px solid #ccc; border-radius: 4px; }
-  .summary { background: #eef7fa; padding: 15px; border-radius: 6px; font-size: 1.1em; }
-  .summary div { margin-bottom: 8px; }
-  .total-cost { font-size: 1.3em; font-weight: bold; color: #27ae60; }
-  button { padding: 8px 15px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer; }
-  button:hover { background: #219150; }
+  .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+  h1 { text-align: center; color: #1a365d; margin-bottom: 25px; }
+  .section { margin-bottom: 20px; padding: 15px; border: 1px solid #e2e8f0; border-radius: 6px; background: #f8fafc; }
+  .section-title { font-weight: bold; font-size: 1.1em; color: #2b6cb0; margin-bottom: 12px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+  .form-group { display: flex; flex-direction: column; }
+  label { font-size: 0.9em; margin-bottom: 5px; font-weight: 600; }
+  input, select { padding: 8px 12px; border: 1px solid #cbd5e0; border-radius: 4px; font-size: 0.95em; }
+  input:read-only { background-color: #edf2f7; }
+  .results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; background: #ebf8ff; padding: 15px; border-radius: 6px; border: 1px solid #bee3f8; }
+  .result-box { display: flex; flex-direction: column; }
+  .result-value { font-size: 1.2em; font-weight: bold; color: #2c5282; margin-top: 4px; }
 </style>
 </head>
 <body>
+
 <div class="container">
   <h1>Export Landed Cost Calculator</h1>
-  
-  <!-- Commodity Selection & Presets -->
+
+  <!-- 1. Commodity & Presets -->
   <div class="section">
     <div class="section-title">Commodity & Presets</div>
     <div class="grid">
-      <div class="item">
-        <label for="commodity">Commodity Dropdown (40 Items)</label>
-        <select id="commodity" onchange="applyPreset()">
-          <option value="">Select Commodity...</option>
-          <optgroup label="Agriculture">
-            <option value="rice">Basmati Rice</option>
-            <option value="wheat">Durum Wheat</option>
-            <option value="tea">Assam Black Tea</option>
+      <div class="form-group">
+        <label for="commoditySelect">Commodity Dropdown</label>
+        <select id="commoditySelect" onchange="applyPreset()">
+          <optgroup label="Agriculture & Food">
+            <option value="basmati">Basmati Rice</option>
+            <option value="darjeeling">Darjeeling Tea</option>
+            <option value="alphonso">Alphonso Mangoes</option>
+            <option value="spices">Indian Spices Mix</option>
+            <option value="cashew">Raw Cashew Nuts</option>
             <option value="coffee">Arabica Coffee Beans</option>
-            <option value="spices">Turmeric Powder</option>
             <option value="sugar">Refined Sugar</option>
-            <option value="cotton">Raw Cotton</option>
-            <option value="maize">Yellow Maize</option>
+            <option value="wheat">Durum Wheat</option>
+            <option value="turmeric">Organic Turmeric Powder</option>
+            <option value="cardamom">Green Cardamom</option>
           </optgroup>
           <optgroup label="Textiles & Apparel">
-            <option value="cotton_yarn">Cotton Yarn</option>
-            <option value="silk_fabric">Silk Fabric</option>
+            <option value="cotton">Organic Cotton Yarn</option>
+            <option value="silk">Kanjeevaram Silk Saree</option>
+            <option value="jute">Jute Hessian Bags</option>
+            <option value="leather">Leather Jackets</option>
+            <option value="denim">Denim Fabric</option>
+            <option value="wool">Pashmina Shawls</option>
             <option value="garments">Readymade Garments</option>
-            <option value="jute">Jute Bags</option>
-            <option value="leather">Leather Footwear</option>
-            <option value="carpet">Handmade Carpets</option>
-            <option value="apparel">Denim Jeans</option>
-            <option value="curtains">Home Textiles</option>
+            <option value="carpet">Handmade Woolen Carpets</option>
+            <option value="home_textile">Bed Linen Sets</option>
+            <option value="coir">Coir Fiber Mats</option>
           </optgroup>
-          <optgroup label="Chemicals & Pharma">
-            <option value="paracetamol">Paracetamol API</option>
-            <option value="fertilizer">Urea Fertilizer</option>
-            <option value="polymers">Polyethylene Granules</option>
-            <option value="pesticides">Insecticides</option>
-            <option value="dyes">Synthetic Dyes</option>
-            <option value="essential_oils">Peppermint Oil</option>
-            <option value="soap">Industrial Soap Base</option>
-            <option value="vaccines">Human Vaccines</option>
-          </optgroup>
-          <optgroup label="Metals & Minerals">
-            <option value="steel">Iron & Steel Bars</option>
-            <option value="aluminum">Aluminum Ingots</option>
-            <option value="copper">Copper Cathodes</option>
-            <option value="gold">Gold Jewelry</option>
+          <optgroup label="Metals, Minerals & Engineering">
+            <option value="iron_ore">Iron Ore Pellets</option>
+            <option value="steel">Hot Rolled Steel Coils</option>
+            <option value="aluminum">Ingots & Sheets</option>
+            <option value="copper">Copper Wires</option>
+            <option value="auto_parts">Precision Auto Components</option>
+            <option value="machinery">Industrial Pumps</option>
             <option value="granite">Polished Granite Slabs</option>
-            <option value="brass">Brass Fittings</option>
-            <option value="coal">Thermal Coal</option>
-            <option value="zinc">Zinc Concentrates</option>
+            <option value="brass">Handicraft Brassware</option>
+            <option value="bauxite">Raw Bauxite</option>
+            <option value="pipes">Seamless Steel Pipes</option>
           </optgroup>
-          <optgroup label="Engineering & Electronics">
-            <option value="auto_parts">Auto Components</option>
-            <option value="pumps">Centrifugal Pumps</option>
-            <option value="transformers">Power Transformers</option>
-            <option value="cables">Copper Wires & Cables</option>
-            <option value="valves">Industrial Valves</option>
-            <option value="solar">Solar Panels</option>
-            <option value="batteries">Lithium Batteries</option>
-            <option value="machinery">CNC Machines</option>
+          <optgroup label="Chemicals & Pharmaceuticals">
+            <option value="paracetamol">Paracetamol API</option>
+            <option value="generic_meds">Generic Antibiotics</option>
+            <option value="dyes">Synthetic Organic Dyes</option>
+            <option value="agrochemicals">Pesticides & Fertilizers</option>
+            <option value="polymers">Polyethylene Granules</option>
+            <option value="essential_oils">Jasmine Essential Oil</option>
+            <option value="vaccines">Human Vaccines</option>
+            <option value="soaps">Herbal Extracts & Soaps</option>
+            <option value="paints">Industrial Coatings</option>
+            <option value="cosmetics">Ayurvedic Skincare</option>
           </optgroup>
         </select>
       </div>
-      <div class="item">
+      <div class="form-group">
         <label for="category">Category</label>
-        <input type="text" id="category" readonly value="General">
+        <input type="text" id="category" readonly>
       </div>
-      <div class="item">
+      <div class="form-group">
         <label for="basePrice">Base Price per Unit ($)</label>
-        <input type="number" id="basePrice" value="100" oninput="calculate()">
+        <input type="number" id="basePrice" oninput="calculate()">
       </div>
-      <div class="item">
-        <label for="quantity">Quantity</label>
+      <div class="form-group">
+        <label for="quantity">Quantity (Units)</label>
         <input type="number" id="quantity" value="1000" oninput="calculate()">
       </div>
     </div>
   </div>
 
-  <!-- Shipping & Freight -->
+  <!-- 2. Shipping & Logistics -->
   <div class="section">
-    <div class="section-title">Shipping & Logistics</div>
+    <div class="section-title">Shipping & Logistics (Per Unit Scale)</div>
     <div class="grid">
-      <div class="item">
-        <label for="oceanFreight">Ocean/Air Freight ($)</label>
-        <input type="number" id="oceanFreight" value="1500" oninput="calculate()">
+      <div class="form-group">
+        <label for="freightCost">Freight Cost per Unit ($)</label>
+        <input type="number" id="freightCost" step="0.01" oninput="calculate()">
       </div>
-      <div class="item">
-        <label for="inlandFreight">Inland Transport ($)</label>
-        <input type="number" id="inlandFreight" value="300" oninput="calculate()">
+      <div class="form-group">
+        <label for="inlandTransport">Base Inland Transport ($)</label>
+        <input type="number" id="inlandTransport" oninput="calculate()">
       </div>
-      <div class="item">
+      <div class="form-group">
         <label for="insuranceRate">Insurance Rate (%)</label>
-        <input type="number" id="insuranceRate" value="0.5" step="0.1" oninput="calculate()">
+        <input type="number" id="insuranceRate" step="0.1" oninput="calculate()">
       </div>
-      <div class="item">
-        <label for="portHandling">Port Handling Fees ($)</label>
-        <input type="number" id="portHandling" value="250" oninput="calculate()">
+      <div class="form-group">
+        <label for="portHandling">Port Handling per Unit ($)</label>
+        <input type="number" id="portHandling" step="0.01" oninput="calculate()">
       </div>
     </div>
   </div>
 
-  <!-- Duties & Taxes -->
+  <!-- 3. Customs, Duties & Taxes -->
   <div class="section">
     <div class="section-title">Customs, Duties & Taxes</div>
     <div class="grid">
-      <div class="item">
+      <div class="form-group">
         <label for="customsDuty">Customs Duty (%)</label>
-        <input type="number" id="customsDuty" value="7.5" step="0.1" oninput="calculate()">
+        <input type="number" id="customsDuty" step="0.1" oninput="calculate()">
       </div>
-      <div class="item">
-        <label for="vatRate">VAT / Import Tax (%)</label>
-        <input type="number" id="vatRate" value="10" step="0.1" oninput="calculate()">
+      <div class="form-group">
+        <label for="vatTax">VAT / Import Tax (%)</label>
+        <input type="number" id="vatTax" step="0.1" oninput="calculate()">
       </div>
-      <div class="item">
-        <label for="brokerageFee">Customs Brokerage ($)</label>
-        <input type="number" id="brokerageFee" value="150" oninput="calculate()">
-      </div>
-      <div class="item">
-        <label for="miscFees">Misc. Surcharges ($)</label>
-        <input type="number" id="miscFees" value="50" oninput="calculate()">
+      <div class="form-group">
+        <label for="brokerage">Customs Brokerage ($)</label>
+        <input type="number" id="brokerage" oninput="calculate()">
       </div>
     </div>
   </div>
 
-  <!-- Summary & Landed Cost Formulas -->
-  <div class="summary">
-    <div><strong>Total Base Product Value (FOB):</strong> $<span id="totalFob">0.00</span></div>
-    <div><strong>Freight & Insurance (CIF Adjustment):</strong> $<span id="totalFreightIns">0.00</span></div>
-    <div><strong>Total Customs Duty & Taxes:</strong> $<span id="totalDuties">0.00</span></div>
-    <div><strong>Total Handling & Fees:</strong> $<span id="totalFees">0.00</span></div>
-    <hr>
-    <div class="total-cost">Total Landed Cost: $<span id="totalLanded">0.00</span></div>
-    <div><strong>Landed Cost Per Unit:</strong> $<span id="unitLanded">0.00</span></div>
+  <!-- 4. Landed Cost Breakdown -->
+  <div class="section">
+    <div class="section-title">Landed Cost Summary</div>
+    <div class="results-grid">
+      <div class="result-box">
+        <label>Total Product Cost</label>
+        <div class="result-value" id="resProductCost">$0.00</div>
+      </div>
+      <div class="result-box">
+        <label>Total Freight Cost</label>
+        <div class="result-value" id="resFreight">$0.00</div>
+      </div>
+      <div class="result-box">
+        <label>Total Inland Transport</label>
+        <div class="result-value" id="resInland">$0.00</div>
+      </div>
+      <div class="result-box">
+        <label>Total Insurance</label>
+        <div class="result-value" id="resInsurance">$0.00</div>
+      </div>
+      <div class="result-box">
+        <label>Total Duties & Taxes</label>
+        <div class="result-value" id="resDuties">$0.00</div>
+      </div>
+      <div class="result-box">
+        <label>Total Landed Cost</label>
+        <div class="result-value" id="resTotalLanded">$0.00</div>
+      </div>
+      <div class="result-box" style="grid-column: 1 / -1; margin-top: 10px; border-top: 1px solid #cbd5e0; padding-top: 10px;">
+        <label style="font-size: 1.1em; color: #1a365d;">Effective Cost Per Unit</label>
+        <div class="result-value" id="resUnitLanded" style="font-size: 1.5em; color: #2b6cb0;">$0.00</div>
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
-function applyPreset() {
-  const comm = document.getElementById('commodity').value;
-  const category = document.getElementById('category');
-  const customs = document.getElementById('customsDuty');
-  const basePrice = document.getElementById('basePrice');
-
   const presets = {
-    rice: { cat: "Agriculture", duty: 5, price: 800 },
-    wheat: { cat: "Agriculture", duty: 0, price: 300 },
-    tea: { cat: "Agriculture", duty: 10, price: 4000 },
-    coffee: { cat: "Agriculture", duty: 8, price: 3500 },
-    spices: { cat: "Agriculture", duty: 6, price: 2500 },
-    sugar: { cat: "Agriculture", duty: 12, price: 500 },
-    cotton: { cat: "Agriculture", duty: 5, price: 1800 },
-    maize: { cat: "Agriculture", duty: 0, price: 250 },
-    cotton_yarn: { cat: "Textiles & Apparel", duty: 7.5, price: 3200 },
-    silk_fabric: { cat: "Textiles & Apparel", duty: 10, price: 15000 },
-    garments: { cat: "Textiles & Apparel", duty: 12, price: 12 },
-    jute: { cat: "Textiles & Apparel", duty: 5, price: 1.5 },
-    leather: { cat: "Textiles & Apparel", duty: 10, price: 45 },
-    carpet: { cat: "Textiles & Apparel", duty: 8, price: 120 },
-    apparel: { cat: "Textiles & Apparel", duty: 12, price: 22 },
-    curtains: { cat: "Textiles & Apparel", duty: 10, price: 15 },
-    paracetamol: { cat: "Chemicals & Pharma", duty: 6.5, price: 7 },
-    fertilizer: { cat: "Chemicals & Pharma", duty: 5, price: 450 },
-    polymers: { cat: "Chemicals & Pharma", duty: 7.5, price: 1300 },
-    pesticides: { cat: "Chemicals & Pharma", duty: 10, price: 8500 },
-    dyes: { cat: "Chemicals & Pharma", duty: 6.5, price: 4200 },
-    essential_oils: { cat: "Chemicals & Pharma", duty: 8, price: 25000 },
-    soap: { cat: "Chemicals & Pharma", duty: 7.5, price: 900 },
-    vaccines: { cat: "Chemicals & Pharma", duty: 0, price: 15 },
-    steel: { cat: "Metals & Minerals", duty: 15, price: 750 },
-    aluminum: { cat: "Metals & Minerals", duty: 10, price: 2400 },
-    copper: { cat: "Metals & Minerals", duty: 5, price: 8500 },
-    gold: { cat: "Metals & Minerals", duty: 12.5, price: 65000 },
-    granite: { cat: "Metals & Minerals", duty: 10, price: 45 },
-    brass: { cat: "Metals & Minerals", duty: 7.5, price: 5200 },
-    coal: { cat: "Metals & Minerals", duty: 5, price: 140 },
-    zinc: { cat: "Metals & Minerals", duty: 5, price: 2800 },
-    auto_parts: { cat: "Engineering & Electronics", duty: 10, price: 85 },
-    pumps: { cat: "Engineering & Electronics", duty: 7.5, price: 350 },
-    transformers: { cat: "Engineering & Electronics", duty: 7.5, price: 12000 },
-    cables: { cat: "Engineering & Electronics", duty: 10, price: 4500 },
-    valves: { cat: "Engineering & Electronics", duty: 7.5, price: 220 },
-    solar: { cat: "Engineering & Electronics", duty: 0, price: 150 },
-    batteries: { cat: "Engineering & Electronics", duty: 10, price: 180 },
-    machinery: { cat: "Engineering & Electronics", duty: 7.5, price: 45000 }
+    // Agriculture & Food
+    basmati: { category: 'Agriculture', price: 800, freight: 1.5, inland: 300, insurance: 0.5, duty: 5, vat: 10, port: 0.2 },
+    darjeeling: { category: 'Agriculture', price: 15, freight: 0.1, inland: 150, insurance: 0.8, duty: 10, vat: 12, port: 0.05 },
+    alphonso: { category: 'Agriculture', price: 25, freight: 0.5, inland: 200, insurance: 1.2, duty: 8, vat: 5, port: 0.1 },
+    spices: { category: 'Agriculture', price: 6, freight: 0.05, inland: 100, insurance: 0.5, duty: 6, vat: 8, port: 0.02 },
+    cashew: { category: 'Agriculture', price: 8, freight: 0.08, inland: 120, insurance: 0.6, duty: 5, vat: 5, port: 0.03 },
+    coffee: { category: 'Agriculture', price: 4.5, freight: 0.04, inland: 110, insurance: 0.4, duty: 7, vat: 10, port: 0.02 },
+    sugar: { category: 'Agriculture', price: 0.5, freight: 0.01, inland: 400, insurance: 0.3, duty: 12, vat: 5, port: 0.01 },
+    wheat: { category: 'Agriculture', price: 0.3, freight: 0.01, inland: 500, insurance: 0.3, duty: 10, vat: 5, port: 0.01 },
+    turmeric: { category: 'Agriculture', price: 3, freight: 0.03, inland: 90, insurance: 0.5, duty: 5, vat: 5, port: 0.02 },
+    cardamom: { category: 'Agriculture', price: 30, freight: 0.2, inland: 100, insurance: 1.0, duty: 8, vat: 10, port: 0.05 },
+
+    // Textiles & Apparel
+    cotton: { category: 'Textiles', price: 4, freight: 0.05, inland: 150, insurance: 0.4, duty: 8, vat: 12, port: 0.02 },
+    silk: { category: 'Textiles', price: 120, freight: 1.0, inland: 80, insurance: 1.5, duty: 15, vat: 18, port: 0.2 },
+    jute: { category: 'Textiles', price: 1.2, freight: 0.02, inland: 200, insurance: 0.3, duty: 5, vat: 5, port: 0.01 },
+    leather: { category: 'Textiles', price: 85, freight: 0.8, inland: 100, insurance: 1.0, duty: 12, vat: 15, port: 0.15 },
+    denim: { category: 'Textiles', price: 5, freight: 0.06, inland: 160, insurance: 0.5, duty: 10, vat: 12, port: 0.03 },
+    wool: { category: 'Textiles', price: 150, freight: 1.2, inland: 70, insurance: 1.8, duty: 12, vat: 18, port: 0.25 },
+    garments: { category: 'Textiles', price: 18, freight: 0.15, inland: 120, insurance: 0.6, duty: 14, vat: 15, port: 0.05 },
+    carpet: { category: 'Textiles', price: 200, freight: 2.5, inland: 150, insurance: 1.2, duty: 10, vat: 12, port: 0.5 },
+    home_textile: { category: 'Textiles', price: 22, freight: 0.2, inland: 130, insurance: 0.5, duty: 8, vat: 10, port: 0.06 },
+    coir: { category: 'Textiles', price: 3, freight: 0.04, inland: 180, insurance: 0.4, duty: 4, vat: 5, port: 0.02 },
+
+    // Metals, Minerals & Engineering
+    iron_ore: { category: 'Metals & Engineering', price: 110, freight: 5.0, inland: 800, insurance: 0.5, duty: 0, vat: 5, port: 1.0 },
+    steel: { category: 'Metals & Engineering', price: 750, freight: 15.0, inland: 600, insurance: 0.6, duty: 5, vat: 10, port: 2.5 },
+    aluminum: { category: 'Metals & Engineering', price: 2400, freight: 20.0, inland: 500, insurance: 0.5, duty: 6, vat: 8, port: 3.0 },
+    copper: { category: 'Metals & Engineering', price: 8500, freight: 30.0, inland: 400, insurance: 0.7, duty: 4, vat: 10, port: 4.0 },
+    auto_parts: { category: 'Metals & Engineering', price: 45, freight: 0.5, inland: 150, insurance: 0.8, duty: 10, vat: 15, port: 0.1 },
+    machinery: { category: 'Metals & Engineering', price: 1200, freight: 25.0, inland: 350, insurance: 1.0, duty: 7.5, vat: 12, port: 5.0 },
+    granite: { category: 'Metals & Engineering', price: 35, freight: 2.0, inland: 450, insurance: 0.8, duty: 5, vat: 8, port: 0.4 },
+    brass: { category: 'Metals & Engineering', price: 28, freight: 0.3, inland: 100, insurance: 0.6, duty: 8, vat: 12, port: 0.08 },
+    bauxite: { category: 'Metals & Engineering', price: 50, freight: 3.5, inland: 700, insurance: 0.4, duty: 2, vat: 5, port: 0.8 },
+    pipes: { category: 'Metals & Engineering', price: 90, freight: 1.8, inland: 300, insurance: 0.5, duty: 6, vat: 10, port: 0.3 },
+
+    // Chemicals & Pharmaceuticals
+    paracetamol: { category: 'Chemicals & Pharma', price: 7, freight: 0.08, inland: 100, insurance: 0.5, duty: 6.5, vat: 12, port: 0.02 },
+    generic_meds: { category: 'Chemicals & Pharma', price: 2, freight: 0.02, inland: 90, insurance: 0.6, duty: 5, vat: 8, port: 0.01 },
+    dyes: { category: 'Chemicals & Pharma', price: 12, freight: 0.15, inland: 120, insurance: 0.5, duty: 8.5, vat: 15, port: 0.04 },
+    agrochemicals: { category: 'Chemicals & Pharma', price: 18, freight: 0.2, inland: 140, insurance: 0.7, duty: 10, vat: 12, port: 0.05 },
+    polymers: { category: 'Chemicals & Pharma', price: 1.4, freight: 0.03, inland: 250, insurance: 0.4, duty: 6, vat: 10, port: 0.01 },
+    essential_oils: { category: 'Chemicals & Pharma', price: 250, freight: 1.5, inland: 60, insurance: 1.2, duty: 10, vat: 18, port: 0.2 },
+    vaccines: { category: 'Chemicals & Pharma', price: 15, freight: 0.5, inland: 200, insurance: 2.0, duty: 0, vat: 5, port: 0.1 },
+    soaps: { category: 'Chemicals & Pharma', price: 4, freight: 0.04, inland: 80, insurance: 0.4, duty: 8, vat: 12, port: 0.02 },
+    paints: { category: 'Chemicals & Pharma', price: 25, freight: 0.3, inland: 150, insurance: 0.6, duty: 9, vat: 15, port: 0.08 },
+    cosmetics: { category: 'Chemicals & Pharma', price: 10, freight: 0.1, inland: 90, insurance: 0.8, duty: 12, vat: 18, port: 0.03 }
   };
 
-  if (presets[comm]) {
-    category.value = presets[comm].cat;
-    customs.value = presets[comm].duty;
-    basePrice.value = presets[comm].price;
+  function applyPreset() {
+    const item = document.getElementById('commoditySelect').value;
+    const p = presets[item];
+    if (p) {
+      document.getElementById('category').value = p.category;
+      document.getElementById('basePrice').value = p.price;
+      document.getElementById('freightCost').value = p.freight;
+      document.getElementById('inlandTransport').value = p.inland;
+      document.getElementById('insuranceRate').value = p.insurance;
+      document.getElementById('customsDuty').value = p.duty;
+      document.getElementById('vatTax').value = p.vat;
+      document.getElementById('portHandling').value = p.port;
+      calculate();
+    }
   }
-  calculate();
-}
 
-function calculate() {
-  const basePrice = parseFloat(document.getElementById('basePrice').value) || 0;
-  const quantity = parseFloat(document.getElementById('quantity').value) || 0;
-  const oceanFreight = parseFloat(document.getElementById('oceanFreight').value) || 0;
-  const inlandFreight = parseFloat(document.getElementById('inlandFreight').value) || 0;
-  const insuranceRate = parseFloat(document.getElementById('insuranceRate').value) || 0;
-  const portHandling = parseFloat(document.getElementById('portHandling').value) || 0;
-  const customsDuty = parseFloat(document.getElementById('customsDuty').value) || 0;
-  const vatRate = parseFloat(document.getElementById('vatRate').value) || 0;
-  const brokerageFee = parseFloat(document.getElementById('brokerageFee').value) || 0;
-  const miscFees = parseFloat(document.getElementById('miscFees').value) || 0;
+  function calculate() {
+    const qty = parseFloat(document.getElementById('quantity').value) || 0;
+    const basePrice = parseFloat(document.getElementById('basePrice').value) || 0;
+    const freightCost = parseFloat(document.getElementById('freightCost').value) || 0;
+    const inlandTransport = parseFloat(document.getElementById('inlandTransport').value) || 0;
+    const insuranceRate = parseFloat(document.getElementById('insuranceRate').value) || 0;
+    const portHandling = parseFloat(document.getElementById('portHandling').value) || 0;
+    const customsDuty = parseFloat(document.getElementById('customsDuty').value) || 0;
+    const vatTax = parseFloat(document.getElementById('vatTax').value) || 0;
 
-  // Landed Cost Formulas
-  const totalFob = basePrice * quantity;
-  const totalFreight = oceanFreight + inlandFreight;
-  const insuranceAmount = (totalFob + totalFreight) * (insuranceRate / 100);
-  const cifValue = totalFob + totalFreight + insuranceAmount;
+    // Dynamic quantity-scaling calculations
+    const totalProductCost = basePrice * qty;
+    const totalFreight = freightCost * qty;
+    
+    // Scale inland transport slightly with quantity scale (e.g. base + small per unit factor or full base)
+    // Dynamic inland scaling: base inland transport plus dynamic volume factor
+    const totalInland = inlandTransport + (qty > 1000 ? (qty - 1000) * 0.05 : 0);
+    
+    const totalPort = portHandling * qty;
+    const subtotalFOB = totalProductCost + totalInland + totalPort;
+    const totalCIF = subtotalFOB + totalFreight;
+    const totalInsurance = (totalCIF * insuranceRate) / 100;
+    
+    const dutyVal = (totalCIF * customsDuty) / 100;
+    const vatVal = ((totalCIF + dutyVal) * vatTax) / 100;
+    const totalDuties = dutyVal + vatVal;
 
-  const dutyAmount = cifValue * (customsDuty / 100);
-  const vatAmount = (cifValue + dutyAmount) * (vatRate / 100);
-  const totalDuties = dutyAmount + vatAmount;
+    const totalLandedCost = totalCIF + totalInsurance + totalDuties;
+    const unitLandedCost = qty > 0 ? (totalLandedCost / qty) : 0;
 
-  const totalFees = portHandling + brokerageFee + miscFees;
-  const totalLandedCost = cifValue + totalDuties + totalFees;
-  const unitLandedCost = quantity > 0 ? (totalLandedCost / quantity) : 0;
+    document.getElementById('resProductCost').innerText = '$' + totalProductCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    document.getElementById('resFreight').innerText = '$' + totalFreight.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    document.getElementById('resInland').innerText = '$' + totalInland.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    document.getElementById('resInsurance').innerText = '$' + totalInsurance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    document.getElementById('resDuties').innerText = '$' + totalDuties.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    document.getElementById('resTotalLanded').innerText = '$' + totalLandedCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    document.getElementById('resUnitLanded').innerText = '$' + unitLandedCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  }
 
-  document.getElementById('totalFob').innerText = totalFob.toFixed(2);
-  document.getElementById('totalFreightIns').innerText = (totalFreight + insuranceAmount).toFixed(2);
-  document.getElementById('totalDuties').innerText = totalDuties.toFixed(2);
-  document.getElementById('totalFees').innerText = totalFees.toFixed(2);
-  document.getElementById('totalLanded').innerText = totalLandedCost.toFixed(2);
-  document.getElementById('unitLanded').innerText = unitLandedCost.toFixed(2);
-}
-
-// Initial calculation
-calculate();
+  // Initial calculation on page load
+  window.onload = function() {
+    applyPreset();
+  };
 </script>
+
 </body>
 </html>

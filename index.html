@@ -1,24 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>40-Item HTML Calculator</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .calculator { max-width: 400px; padding: 20px; border: 1px solid #ccc; borderRadius: 8px; }
-        .item { display: flex; justify-content: space-between; margin-bottom: 5px; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>40-Item HTML Calculator</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f4f4f9; }
+    .calculator { max-width: 500px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    h2 { text-align: center; }
+    .item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .item input { width: 120px; padding: 5px; text-align: right; }
+    .total { margin-top: 20px; text-align: right; font-size: 1.2em; font-weight: bold; }
+  </style>
 </head>
 <body>
-    <div class="calculator">
-        <h2>Item Calculator</h2>
-        <!-- 40 items -->
-        <script>
-            for(let i=1; i<=40; i++) {
-                document.write(`<div class="item"><span>Item ${i}</span><input type="number" value="${i}" min="0"/></div>`);
-            }
-        </script>
-    </div>
+  <div class="calculator">
+    <h2>40-Item HTML Calculator</h2>
+    <div class="item"><label>Item 1</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 2</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 3</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 4</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 5</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 6</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 7</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 8</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 9</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 10</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 11</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 12</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 13</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 14</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 15</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 16</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 17</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 18</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 19</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 20</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 21</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 22</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 23</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 24</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 25</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 26</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 27</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 28</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 29</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 30</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 31</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 32</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 33</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 34</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 35</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 36</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 37</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 38</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 39</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="item"><label>Item 40</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
+    <div class="total">Total: <span id="total-val">0</span></div>
+  </div>
+  <script>
+    function calculate() {
+      let sum = 0;
+      document.querySelectorAll('.calc-item').forEach(el => {
+        sum += Number(el.value) || 0;
+      });
+      document.getElementById('total-val').textContent = sum;
+    }
+  </script>
 </body>
 </html>

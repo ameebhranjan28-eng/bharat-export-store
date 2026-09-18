@@ -6,7 +6,145 @@
 <title>40-Item HTML Calculator with Commodity Dropdown, Categories, Presets, and Landed Cost Formulas</title>
 <style>
   body { font-family: Arial, sans-serif; margin: 20px; background: #f4f4f9; color: #333; }
-  .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+  .container { max-width: 900px; margin: 0 auto; backg<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Export Landed Cost Calculator - Dynamic Scale</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f4f4f9; color: #333; }
+        .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2c3e50; }
+        .section { margin-bottom: 20px; padding: 15px; border: 1px solid #e0e0e0; border-radius: 6px; }
+        .section-title { font-weight: bold; font-size: 1.2em; margin-bottom: 10px; color: #2980b9; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+        .item { display: flex; flex-direction: column; }
+        label { font-size: 0.85em; margin-bottom: 3px; font-weight: 600; }
+        input, select { padding: 6px; border: 1px solid #ccc; border-radius: 4px; }
+        .summary { background: #eef7fa; padding: 15px; border-radius: 6px; font-size: 1.1em; }
+        .summary div { margin-bottom: 8px; }
+        .total-cost { font-size: 1.3em; font-weight: bold; color: #27ae60; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Export Landed Cost Calculator</h1>
+    
+    <div class="section">
+        <div class="section-title">Commodity & Presets</div>
+        <div class="grid">
+            <div class="item">
+                <label for="commodity">Commodity Dropdown</label>
+                <select id="commodity" onchange="applyPreset()">
+                    <option value="rice">Basmati Rice</option>
+                    <option value="paracetamol" selected>Paracetamol API</option>
+                </select>
+            </div>
+            <div class="item">
+                <label for="category">Category</label>
+                <input type="text" id="category" readonly value="Chemicals & Pharma">
+            </div>
+            <div class="item">
+                <label for="basePrice">Base Price per Unit ($)</label>
+                <input type="number" id="basePrice" value="7" oninput="calculate()">
+            </div>
+            <div class="item">
+                <label for="quantity">Quantity (Units)</label>
+                <input type="number" id="quantity" value="1000" oninput="calculate()">
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Shipping & Logistics (Per Unit Scale)</div>
+        <div class="grid">
+            <div class="item">
+                <label for="unitFreight">Freight Cost per Unit ($)</label>
+                <input type="number" id="unitFreight" value="1.50" step="0.1" oninput="calculate()">
+            </div>
+            <div class="item">
+                <label for="inlandFreight">Base Inland Transport ($)</label>
+                <input type="number" id="inlandFreight" value="300" oninput="calculate()">
+            </div>
+            <div class="item">
+                <label for="insuranceRate">Insurance Rate (%)</label>
+                <input type="number" id="insuranceRate" value="0.5" step="0.1" oninput="calculate()">
+            </div>
+            <div class="item">
+                <label for="portHandling">Port Handling per Unit ($)</label>
+                <input type="number" id="portHandling" value="0.25" step="0.05" oninput="calculate()">
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Customs, Duties & Taxes</div>
+        <div class="grid">
+            <div class="item">
+                <label for="customsDuty">Customs Duty (%)</label>
+                <input type="number" id="customsDuty" value="6.5" step="0.1" oninput="calculate()">
+            </div>
+            <div class="item">
+                <label for="vatRate">VAT / Import Tax (%)</label>
+                <input type="number" id="vatRate" value="10" step="0.1" oninput="calculate()">
+            </div>
+            <div class="item">
+                <label for="brokerageFee">Customs Brokerage ($)</label>
+                <input type="number" id="brokerageFee" value="150" oninput="calculate()">
+            </div>
+        </div>
+    </div>
+
+    <div class="summary">
+        <div><strong>Total Base Product Value (FOB):</strong> $<span id="totalFob">0.00</span></div>
+        <div><strong>Freight & Insurance (CIF Adjustment):</strong> $<span id="totalFreightIns">0.00</span></div>
+        <div><strong>Total Customs Duty & Taxes:</strong> $<span id="totalDuties">0.00</span></div>
+        <div><strong>Total Handling & Fees:</strong> $<span id="totalFees">0.00</span></div>
+        <hr>
+        <div class="total-cost">Total Landed Cost: $<span id="totalLanded">0.00</span></div>
+        <div><strong>Landed Cost Per Unit:</strong> $<span id="unitLanded">0.00</span></div>
+    </div>
+</div>
+
+<script>
+function calculate() {
+    const basePrice = parseFloat(document.getElementById('basePrice').value) || 0;
+    const quantity = parseFloat(document.getElementById('quantity').value) || 0;
+    const unitFreight = parseFloat(document.getElementById('unitFreight').value) || 0;
+    const inlandFreight = parseFloat(document.getElementById('inlandFreight').value) || 0;
+    const insuranceRate = parseFloat(document.getElementById('insuranceRate').value) || 0;
+    const portHandlingRate = parseFloat(document.getElementById('portHandling').value) || 0;
+    const customsDuty = parseFloat(document.getElementById('customsDuty').value) || 0;
+    const vatRate = parseFloat(document.getElementById('vatRate').value) || 0;
+    const brokerageFee = parseFloat(document.getElementById('brokerageFee').value) || 0;
+
+    // Dynamic scaling calculations
+    const totalFob = basePrice * quantity;
+    const totalFreight = (unitFreight * quantity) + inlandFreight; 
+    const insuranceAmount = (totalFob + totalFreight) * (insuranceRate / 100);
+    const cifValue = totalFob + totalFreight + insuranceAmount;
+    
+    const dutyAmount = cifValue * (customsDuty / 100);
+    const vatAmount = (cifValue + dutyAmount) * (vatRate / 100);
+    const totalDuties = dutyAmount + vatAmount;
+    
+    const totalFees = (portHandlingRate * quantity) + brokerageFee;
+    const totalLandedCost = cifValue + totalDuties + totalFees;
+    const unitLandedCost = quantity > 0 ? (totalLandedCost / quantity) : 0;
+
+    document.getElementById('totalFob').innerText = totalFob.toFixed(2);
+    document.getElementById('totalFreightIns').innerText = (totalFreight + insuranceAmount).toFixed(2);
+    document.getElementById('totalDuties').innerText = totalDuties.toFixed(2);
+    document.getElementById('totalFees').innerText = totalFees.toFixed(2);
+    document.getElementById('totalLanded').innerText = totalLandedCost.toFixed(2);
+    document.getElementById('unitLanded').innerText = unitLandedCost.toFixed(2);
+}
+
+calculate();
+</script>
+</body>
+</html>round: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
   h1 { text-align: center; color: #2c3e50; }
   .section { margin-bottom: 20px; padding: 15px; border: 1px solid #e0e0e0; border-radius: 6px; }
   .section-title { font-weight: bold; font-size: 1.2em; margin-bottom: 10px; color: #2980b9; }

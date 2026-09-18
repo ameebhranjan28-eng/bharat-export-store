@@ -1,71 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>40-Item HTML Calculator</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; background: #f4f4f9; }
-    .calculator { max-width: 500px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    h2 { text-align: center; }
-    .item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-    .item input { width: 120px; padding: 5px; text-align: right; }
-    .total { margin-top: 20px; text-align: right; font-size: 1.2em; font-weight: bold; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>40-Item HTML Calculator with Commodity Dropdown, Categories, Presets, and Landed Cost Formulas</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; background: #f4f4f9; color: #333; }
+  .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+  h1 { text-align: center; color: #2c3e50; }
+  .section { margin-bottom: 20px; padding: 15px; border: 1px solid #e0e0e0; border-radius: 6px; }
+  .section-title { font-weight: bold; font-size: 1.2em; margin-bottom: 10px; color: #2980b9; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+  .item { display: flex; flex-direction: column; }
+  label { font-size: 0.85em; margin-bottom: 3px; font-weight: 600; }
+  input, select { padding: 6px; border: 1px solid #ccc; border-radius: 4px; }
+  .summary { background: #eef7fa; padding: 15px; border-radius: 6px; font-size: 1.1em; }
+  .summary div { margin-bottom: 8px; }
+  .total-cost { font-size: 1.3em; font-weight: bold; color: #27ae60; }
+  button { padding: 8px 15px; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer; }
+  button:hover { background: #219150; }
+</style>
 </head>
 <body>
-  <div class="calculator">
-    <h2>40-Item HTML Calculator</h2>
-    <div class="item"><label>Item 1</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 2</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 3</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 4</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 5</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 6</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 7</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 8</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 9</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 10</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 11</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 12</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 13</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 14</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 15</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 16</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 17</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 18</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 19</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 20</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 21</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 22</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 23</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 24</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 25</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 26</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 27</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 28</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 29</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 30</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 31</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 32</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 33</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 34</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 35</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 36</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 37</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 38</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 39</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="item"><label>Item 40</label><input type="number" class="calc-item" value="0" oninput="calculate()"></div>
-    <div class="total">Total: <span id="total-val">0</span></div>
+<div class="container">
+  <h1>Export Landed Cost Calculator</h1>
+  
+  <!-- Commodity Selection & Presets -->
+  <div class="section">
+    <div class="section-title">Commodity & Presets</div>
+    <div class="grid">
+      <div class="item">
+        <label for="commodity">Commodity Dropdown (40 Items)</label>
+        <select id="commodity" onchange="applyPreset()">
+          <option value="">Select Commodity...</option>
+          <optgroup label="Agriculture">
+            <option value="rice">Basmati Rice</option>
+            <option value="wheat">Durum Wheat</option>
+            <option value="tea">Assam Black Tea</option>
+            <option value="coffee">Arabica Coffee Beans</option>
+            <option value="spices">Turmeric Powder</option>
+            <option value="sugar">Refined Sugar</option>
+            <option value="cotton">Raw Cotton</option>
+            <option value="maize">Yellow Maize</option>
+          </optgroup>
+          <optgroup label="Textiles & Apparel">
+            <option value="cotton_yarn">Cotton Yarn</option>
+            <option value="silk_fabric">Silk Fabric</option>
+            <option value="garments">Readymade Garments</option>
+            <option value="jute">Jute Bags</option>
+            <option value="leather">Leather Footwear</option>
+            <option value="carpet">Handmade Carpets</option>
+            <option value="apparel">Denim Jeans</option>
+            <option value="curtains">Home Textiles</option>
+          </optgroup>
+          <optgroup label="Chemicals & Pharma">
+            <option value="paracetamol">Paracetamol API</option>
+            <option value="fertilizer">Urea Fertilizer</option>
+            <option value="polymers">Polyethylene Granules</option>
+            <option value="pesticides">Insecticides</option>
+            <option value="dyes">Synthetic Dyes</option>
+            <option value="essential_oils">Peppermint Oil</option>
+            <option value="soap">Industrial Soap Base</option>
+            <option value="vaccines">Human Vaccines</option>
+          </optgroup>
+          <optgroup label="Metals & Minerals">
+            <option value="steel">Iron & Steel Bars</option>
+            <option value="aluminum">Aluminum Ingots</option>
+            <option value="copper">Copper Cathodes</option>
+            <option value="gold">Gold Jewelry</option>
+            <option value="granite">Polished Granite Slabs</option>
+            <option value="brass">Brass Fittings</option>
+            <option value="coal">Thermal Coal</option>
+            <option value="zinc">Zinc Concentrates</option>
+          </optgroup>
+          <optgroup label="Engineering & Electronics">
+            <option value="auto_parts">Auto Components</option>
+            <option value="pumps">Centrifugal Pumps</option>
+            <option value="transformers">Power Transformers</option>
+            <option value="cables">Copper Wires & Cables</option>
+            <option value="valves">Industrial Valves</option>
+            <option value="solar">Solar Panels</option>
+            <option value="batteries">Lithium Batteries</option>
+            <option value="machinery">CNC Machines</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="item">
+        <label for="category">Category</label>
+        <input type="text" id="category" readonly value="General">
+      </div>
+      <div class="item">
+        <label for="basePrice">Base Price per Unit ($)</label>
+        <input type="number" id="basePrice" value="100" oninput="calculate()">
+      </div>
+      <div class="item">
+        <label for="quantity">Quantity</label>
+        <input type="number" id="quantity" value="1000" oninput="calculate()">
+      </div>
+    </div>
   </div>
-  <script>
-    function calculate() {
-      let sum = 0;
-      document.querySelectorAll('.calc-item').forEach(el => {
-        sum += Number(el.value) || 0;
-      });
-      document.getElementById('total-val').textContent = sum;
-    }
-  </script>
+
+  <!-- Shipping & Freight -->
+  <div class="section">
+    <div class="section-title">Shipping & Logistics</div>
+    <div class="grid">
+      <div class="item">
+        <label for="oceanFreight">Ocean/Air Freight ($)</label>
+        <input type="number" id="oceanFreight" value="1500" oninput="calculate()">
+      </div>
+      <div class="item">
+        <label for="inlandFreight">Inland Transport ($)</label>
+        <input type="number" id="inlandFreight" value="300" oninput="calculate()">
+      </div>
+      <div class="item">
+        <label for="insuranceRate">Insurance Rate (%)</label>
+        <input type="number" id="insuranceRate" value="0.5" step="0.1" oninput="calculate()">
+      </div>
+      <div class="item">
+        <label for="portHandling">Port Handling Fees ($)</label>
+        <input type="number" id="portHandling" value="250" oninput="calculate()">
+      </div>
+    </div>
+  </div>
+
+  <!-- Duties & Taxes -->
+  <div class="section">
+    <div class="section-title">Customs, Duties & Taxes</div>
+    <div class="grid">
+      <div class="item">
+        <label for="customsDuty">Customs Duty (%)</label>
+        <input type="number" id="customsDuty" value="7.5" step="0.1" oninput="calculate()">
+      </div>
+      <div class="item">
+        <label for="vatRate">VAT / Import Tax (%)</label>
+        <input type="number" id="vatRate" value="10" step="0.1" oninput="calculate()">
+      </div>
+      <div class="item">
+        <label for="brokerageFee">Customs Brokerage ($)</label>
+        <input type="number" id="brokerageFee" value="150" oninput="calculate()">
+      </div>
+      <div class="item">
+        <label for="miscFees">Misc. Surcharges ($)</label>
+        <input type="number" id="miscFees" value="50" oninput="calculate()">
+      </div>
+    </div>
+  </div>
+
+  <!-- Summary & Landed Cost Formulas -->
+  <div class="summary">
+    <div><strong>Total Base Product Value (FOB):</strong> $<span id="totalFob">0.00</span></div>
+    <div><strong>Freight & Insurance (CIF Adjustment):</strong> $<span id="totalFreightIns">0.00</span></div>
+    <div><strong>Total Customs Duty & Taxes:</strong> $<span id="totalDuties">0.00</span></div>
+    <div><strong>Total Handling & Fees:</strong> $<span id="totalFees">0.00</span></div>
+    <hr>
+    <div class="total-cost">Total Landed Cost: $<span id="totalLanded">0.00</span></div>
+    <div><strong>Landed Cost Per Unit:</strong> $<span id="unitLanded">0.00</span></div>
+  </div>
+</div>
+
+<script>
+function applyPreset() {
+  const comm = document.getElementById('commodity').value;
+  const category = document.getElementById('category');
+  const customs = document.getElementById('customsDuty');
+  const basePrice = document.getElementById('basePrice');
+
+  const presets = {
+    rice: { cat: "Agriculture", duty: 5, price: 800 },
+    wheat: { cat: "Agriculture", duty: 0, price: 300 },
+    tea: { cat: "Agriculture", duty: 10, price: 4000 },
+    coffee: { cat: "Agriculture", duty: 8, price: 3500 },
+    spices: { cat: "Agriculture", duty: 6, price: 2500 },
+    sugar: { cat: "Agriculture", duty: 12, price: 500 },
+    cotton: { cat: "Agriculture", duty: 5, price: 1800 },
+    maize: { cat: "Agriculture", duty: 0, price: 250 },
+    cotton_yarn: { cat: "Textiles & Apparel", duty: 7.5, price: 3200 },
+    silk_fabric: { cat: "Textiles & Apparel", duty: 10, price: 15000 },
+    garments: { cat: "Textiles & Apparel", duty: 12, price: 12 },
+    jute: { cat: "Textiles & Apparel", duty: 5, price: 1.5 },
+    leather: { cat: "Textiles & Apparel", duty: 10, price: 45 },
+    carpet: { cat: "Textiles & Apparel", duty: 8, price: 120 },
+    apparel: { cat: "Textiles & Apparel", duty: 12, price: 22 },
+    curtains: { cat: "Textiles & Apparel", duty: 10, price: 15 },
+    paracetamol: { cat: "Chemicals & Pharma", duty: 6.5, price: 7 },
+    fertilizer: { cat: "Chemicals & Pharma", duty: 5, price: 450 },
+    polymers: { cat: "Chemicals & Pharma", duty: 7.5, price: 1300 },
+    pesticides: { cat: "Chemicals & Pharma", duty: 10, price: 8500 },
+    dyes: { cat: "Chemicals & Pharma", duty: 6.5, price: 4200 },
+    essential_oils: { cat: "Chemicals & Pharma", duty: 8, price: 25000 },
+    soap: { cat: "Chemicals & Pharma", duty: 7.5, price: 900 },
+    vaccines: { cat: "Chemicals & Pharma", duty: 0, price: 15 },
+    steel: { cat: "Metals & Minerals", duty: 15, price: 750 },
+    aluminum: { cat: "Metals & Minerals", duty: 10, price: 2400 },
+    copper: { cat: "Metals & Minerals", duty: 5, price: 8500 },
+    gold: { cat: "Metals & Minerals", duty: 12.5, price: 65000 },
+    granite: { cat: "Metals & Minerals", duty: 10, price: 45 },
+    brass: { cat: "Metals & Minerals", duty: 7.5, price: 5200 },
+    coal: { cat: "Metals & Minerals", duty: 5, price: 140 },
+    zinc: { cat: "Metals & Minerals", duty: 5, price: 2800 },
+    auto_parts: { cat: "Engineering & Electronics", duty: 10, price: 85 },
+    pumps: { cat: "Engineering & Electronics", duty: 7.5, price: 350 },
+    transformers: { cat: "Engineering & Electronics", duty: 7.5, price: 12000 },
+    cables: { cat: "Engineering & Electronics", duty: 10, price: 4500 },
+    valves: { cat: "Engineering & Electronics", duty: 7.5, price: 220 },
+    solar: { cat: "Engineering & Electronics", duty: 0, price: 150 },
+    batteries: { cat: "Engineering & Electronics", duty: 10, price: 180 },
+    machinery: { cat: "Engineering & Electronics", duty: 7.5, price: 45000 }
+  };
+
+  if (presets[comm]) {
+    category.value = presets[comm].cat;
+    customs.value = presets[comm].duty;
+    basePrice.value = presets[comm].price;
+  }
+  calculate();
+}
+
+function calculate() {
+  const basePrice = parseFloat(document.getElementById('basePrice').value) || 0;
+  const quantity = parseFloat(document.getElementById('quantity').value) || 0;
+  const oceanFreight = parseFloat(document.getElementById('oceanFreight').value) || 0;
+  const inlandFreight = parseFloat(document.getElementById('inlandFreight').value) || 0;
+  const insuranceRate = parseFloat(document.getElementById('insuranceRate').value) || 0;
+  const portHandling = parseFloat(document.getElementById('portHandling').value) || 0;
+  const customsDuty = parseFloat(document.getElementById('customsDuty').value) || 0;
+  const vatRate = parseFloat(document.getElementById('vatRate').value) || 0;
+  const brokerageFee = parseFloat(document.getElementById('brokerageFee').value) || 0;
+  const miscFees = parseFloat(document.getElementById('miscFees').value) || 0;
+
+  // Landed Cost Formulas
+  const totalFob = basePrice * quantity;
+  const totalFreight = oceanFreight + inlandFreight;
+  const insuranceAmount = (totalFob + totalFreight) * (insuranceRate / 100);
+  const cifValue = totalFob + totalFreight + insuranceAmount;
+
+  const dutyAmount = cifValue * (customsDuty / 100);
+  const vatAmount = (cifValue + dutyAmount) * (vatRate / 100);
+  const totalDuties = dutyAmount + vatAmount;
+
+  const totalFees = portHandling + brokerageFee + miscFees;
+  const totalLandedCost = cifValue + totalDuties + totalFees;
+  const unitLandedCost = quantity > 0 ? (totalLandedCost / quantity) : 0;
+
+  document.getElementById('totalFob').innerText = totalFob.toFixed(2);
+  document.getElementById('totalFreightIns').innerText = (totalFreight + insuranceAmount).toFixed(2);
+  document.getElementById('totalDuties').innerText = totalDuties.toFixed(2);
+  document.getElementById('totalFees').innerText = totalFees.toFixed(2);
+  document.getElementById('totalLanded').innerText = totalLandedCost.toFixed(2);
+  document.getElementById('unitLanded').innerText = unitLandedCost.toFixed(2);
+}
+
+// Initial calculation
+calculate();
+</script>
 </body>
 </html>
